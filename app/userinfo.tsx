@@ -5,6 +5,7 @@ import { Pressable, ScrollView, Text, TextInput } from "react-native";
 export default function UserInfo() {
     const [name, onChangeName] = useState('');
     const [age, onChangeAge] = useState('');
+    const [pokeNumber, onChangePokeNumber] = useState('');
 
     return (
         <ScrollView
@@ -19,6 +20,13 @@ export default function UserInfo() {
                 placeholder="What is your name?"
                 onChangeText={onChangeName}
                 value={name}
+            />
+            <TextInput
+                //style={}
+                placeholder="What is your age?"
+                onChangeText={onChangeAge}
+                value={age}
+                keyboardType="numeric"
             />
             <TextInput
                 //style={}

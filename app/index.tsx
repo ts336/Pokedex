@@ -67,7 +67,7 @@ export default function Index() {
       takes URL (endpoint) as a parameter and some request info
       endpoint gives 20 pokemon in JSON format*/
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?limit=20"
+        "https://pokeapi.co/api/v2/pokemon/?limit=50"
       );
       
       /* pokemon saved in response variable 

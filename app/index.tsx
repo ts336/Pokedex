@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -39,13 +39,14 @@ const colorsByType = {
 }
 
 export default function Index() {
+  const router = useRouter();
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  
 
   useEffect(() => {
     // fetch pokemon from api
-
     fetchPokemons();
+    // launch request for user details
+    router.push("/userinfo");
   }, [])
 
   async function fetchPokemons() {

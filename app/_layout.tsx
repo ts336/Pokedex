@@ -10,6 +10,16 @@ export default function RootLayout() {
         }}
         />
       <Stack.Screen
+        name="userinfo"
+        options={{
+          title:"User Details",
+          headerBackButtonDisplayMode: "minimal",
+          presentation: "formSheet",
+          sheetAllowedDetents: [0.3, 0.5],
+          sheetGrabberVisible: true,
+        }}
+      />
+      <Stack.Screen
         name="details"
         options={{
           title: "Details",

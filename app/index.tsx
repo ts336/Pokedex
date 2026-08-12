@@ -1,5 +1,5 @@
-import { Link, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { Link, useRootNavigationState, useRouter } from "expo-router";
+import { useEffect, useRef, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 interface Pokemon {
@@ -40,14 +40,26 @@ const colorsByType = {
 
 export default function Index() {
   const router = useRouter();
+  const rootNavigationState = useRootNavigationState();
+  const openedUserInfo = useRef(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
   useEffect(() => {
     // fetch pokemon from api
     fetchPokemons();
-    // launch request for user details
-    router.push("/userinfo");
-  }, [])
+  }, []);
+
+ useEffect(() => {
+    if (!rootNavigationState?.key) return;
+    if (openedUserInfo.current) return;
+
+    openedUserInfo.current = true;
+    const id = setTimeout(() => {
+      router.push("/userinfo");
+    }, 0);
+
+    return () => clearTimeout(id);
+  }, [rootNavigationState?.key, router]);
 
   async function fetchPokemons() {
     try {

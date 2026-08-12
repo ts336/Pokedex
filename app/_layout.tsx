@@ -15,8 +15,10 @@ export default function RootLayout() {
           title:"User Details",
           headerBackButtonDisplayMode: "minimal",
           presentation: "formSheet",
-          sheetAllowedDetents: [0.3, 0.5],
+          sheetAllowedDetents: [0.7, 0.9],
           sheetGrabberVisible: true,
+          gestureEnabled: false,
+          headerBackVisible: false,
         }}
       />
       <Stack.Screen

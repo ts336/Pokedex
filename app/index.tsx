@@ -1,7 +1,7 @@
 import { Link, useRootNavigationState, useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useRef, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 interface Pokemon {
   name: string;
@@ -44,7 +44,9 @@ export default function Index() {
   const rootNavigationState = useRootNavigationState();
   const openedUserInfo = useRef(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  
   const params = useLocalSearchParams();
+  const [pokeNumber, onChangePokeNumber] = useState<string>(String(params.pokeNumber ?? '20'));
 
   // To let app load correctly
   useEffect(() => {
@@ -59,10 +61,18 @@ export default function Index() {
     return () => clearTimeout(id);
   }, [rootNavigationState?.key, router]);
 
-  // fetch pokemon from api
+  // Update pokeNumber when params change
+  useEffect(() => {
+    if (params.pokeNumber) {
+      onChangePokeNumber(String(params.pokeNumber));
+    }
+  }, [params.pokeNumber]);
+
+  // Fetch pokemon from API
   useEffect(() => {
       fetchPokemons();
   }, []);
+
   
   async function fetchPokemons() {
     try {
@@ -110,17 +120,28 @@ export default function Index() {
         padding: 16,
       }}
     >
-      <Text style={styles.heading}>Hello {params.userName}!</Text>
+      <Text style={styles.heading}>Hello {params.userName ?? 'there'}!</Text>
       <Text style={styles.normaltext}>
-          We are currently displaying {params.pokeNumber} pokemon!
+          We are currently displaying {pokeNumber} pokemon!
       </Text>
-      {/* <TextInput
+     
+      <View style={styles.inline}>
+        <TextInput
         style={styles.input}
         placeholder="How many Pokemon do you want to see?"
         onChangeText={onChangePokeNumber}
         value={pokeNumber}
         keyboardType="numeric"
-      /> */}
+        />
+        <Pressable
+            style={styles.button}
+            /* onPress={() => } */
+            >
+            <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
+        </Pressable>
+      </View>
+      
+
       {pokemons.map((pokemon) => (
         <Link 
           key={pokemon.name}
@@ -179,16 +200,20 @@ const styles = StyleSheet.create({
   },
   input: {
       height: 40,
-      marginBottom: 10,
+      width: 260,
       borderWidth: 1,
       borderRadius: 10,
       padding: 10,
   },
   button: {
       backgroundColor: "#111",
-      paddingHorizontal: 160,
-      paddingVertical: 14,
+      paddingHorizontal: 30,
+      paddingVertical: 12,
       borderRadius: 12,
       alignSelf: 'center',
+  },
+  inline: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 })

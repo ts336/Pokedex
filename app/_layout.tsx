@@ -22,6 +22,16 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
+        name="welcome"
+        options={{
+          title:"Welcome",
+          headerBackButtonDisplayMode: "minimal",
+          presentation: "formSheet",
+          sheetAllowedDetents: [0.7, 0.9],
+          sheetGrabberVisible: true,
+        }}
+      />
+      <Stack.Screen
         name="details"
         options={{
           title: "Details",

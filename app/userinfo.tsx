@@ -1,6 +1,6 @@
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput } from "react-native";
 
 export default function UserInfo() {
     const [name, onChangeName] = useState('');
@@ -36,12 +36,16 @@ export default function UserInfo() {
                 value={pokeNumber}
                 keyboardType="numeric"
             />
-
-        <Pressable
-        onPress={() => router.dismiss()}
-        style={styles.button}>
-            <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
-        </Pressable>
+            <Link
+                href={{
+                    pathname: "/welcome",
+                    params: { name: name, pokeNumber: pokeNumber },
+                }}
+                style={styles.button}
+                onPress={() => router.dismiss()}
+                >
+                <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
+            </Link>
         </ScrollView>
   );
 }

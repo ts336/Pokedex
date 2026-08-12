@@ -1,4 +1,5 @@
 import { Link, useRootNavigationState, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useRef, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -43,13 +44,10 @@ export default function Index() {
   const rootNavigationState = useRootNavigationState();
   const openedUserInfo = useRef(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const params = useLocalSearchParams();
 
+  // To let app load correctly
   useEffect(() => {
-    // fetch pokemon from api
-    fetchPokemons();
-  }, []);
-
- useEffect(() => {
     if (!rootNavigationState?.key) return;
     if (openedUserInfo.current) return;
 
@@ -61,6 +59,11 @@ export default function Index() {
     return () => clearTimeout(id);
   }, [rootNavigationState?.key, router]);
 
+  // fetch pokemon from api
+  useEffect(() => {
+      fetchPokemons();
+  }, []);
+  
   async function fetchPokemons() {
     try {
       /* fetch is a function that lets u hit an API,
@@ -107,6 +110,17 @@ export default function Index() {
         padding: 16,
       }}
     >
+      <Text style={styles.heading}>Hello {params.userName}!</Text>
+      <Text style={styles.normaltext}>
+          We are currently displaying {params.pokeNumber} pokemon!
+      </Text>
+      {/* <TextInput
+        style={styles.input}
+        placeholder="How many Pokemon do you want to see?"
+        onChangeText={onChangePokeNumber}
+        value={pokeNumber}
+        keyboardType="numeric"
+      /> */}
       {pokemons.map((pokemon) => (
         <Link 
           key={pokemon.name}
@@ -156,4 +170,25 @@ const styles = StyleSheet.create({
     color: 'grey',
     textAlign: "center",
   },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  normaltext: {
+      marginBottom: 5,        
+  },
+  input: {
+      height: 40,
+      marginBottom: 10,
+      borderWidth: 1,
+      borderRadius: 10,
+      padding: 10,
+  },
+  button: {
+      backgroundColor: "#111",
+      paddingHorizontal: 160,
+      paddingVertical: 14,
+      borderRadius: 12,
+      alignSelf: 'center',
+  }
 })

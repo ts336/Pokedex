@@ -27,8 +27,8 @@ export default function UserInfo() {
       return false;
     }
 
-    if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
-      setErrorMessage('No symbols or special characters are allowed in your name! Only numbers are allowed in age and Pokemon number!');
+    if (!/^[A-Za-z]+$/.test(trimmedName)) {
+      setErrorMessage('Only letters are allowed in your name! No spaces, symbols, or special characters!');
       return false;
     }
 
@@ -62,6 +62,8 @@ export default function UserInfo() {
             style={styles.input}
             placeholder="What is your name?"
             onChangeText={onChangeName}
+            autoCorrect = {false}
+            autoCapitalize="words"
             value={name}
         />
         <TextInput

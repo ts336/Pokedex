@@ -7,9 +7,44 @@ export default function UserInfo() {
   const [age, onChangeAge] = useState("");
   const [pokeNumber, onChangePokeNumber] = useState("");
 
-  // Enables button when there is input
-  const isEnabled = name.length > 0 && age.length > 0 && pokeNumber.length > 0; 
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const isEnabled = name.trim().length > 0 && age.trim().length > 0 && pokeNumber.trim().length > 0;
   const buttonStyle = isEnabled ? styles.enabledButton : styles.disabledButton;
+
+  const handleUserInfo = () => {
+    const trimmedName = name.trim();
+    const ageValue = Number(age);
+    const pokeValue = Number(pokeNumber);
+
+    if (!trimmedName || !age || !pokeNumber) {
+      setErrorMessage('Name, age and number of Pokemon cannot be empty. Please enter your details!');
+      return false;
+    }
+
+    if (trimmedName.length < 3 || trimmedName.length > 15) {
+      setErrorMessage('Name must be longer than 3 characters and less than 16 characters!');
+      return false;
+    }
+
+    if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
+      setErrorMessage('No symbols or special characters are allowed in your name! Only numbers are allowed in age and Pokemon number!');
+      return false;
+    }
+
+    if (!Number.isInteger(ageValue) || ageValue < 12 || ageValue > 110) {
+      setErrorMessage('Only people over age 12 and below 110 can use this program. Please use numbers for your age.');
+      return false;
+    }
+
+    if (!Number.isInteger(pokeValue) || pokeValue < 1 || pokeValue > 100) {
+      setErrorMessage('Please pick a number of Pokemon between 1 to 100 to display');
+      return false;
+    }
+
+    setErrorMessage('');
+    return true;
+  };
 
   return (
     <ScrollView
@@ -43,6 +78,7 @@ export default function UserInfo() {
             value={pokeNumber}
             keyboardType="numeric"
         />
+        
         <Link
             href={{
             pathname: "/welcome",
@@ -50,10 +86,18 @@ export default function UserInfo() {
             }}
             style={buttonStyle}
             disabled={!isEnabled}
-            onPress={() => router.dismiss()}
+            onPress={(e) => {
+              // validate inputs; prevent navigation if invalid
+              if (!handleUserInfo()) {
+                e.preventDefault();
+              } else {
+                router.dismiss();
+              }
+            }}
         >
             <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
         </Link>
+        {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
       </View>
       
       
@@ -77,30 +121,41 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "SF Pro Display",
     letterSpacing: -0.21,
-    width: '80%',
+    width: '100%',
     height: 40,
     marginBottom: 10,
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
+    alignSelf: 'center',
   },
   enabledButton: {
     backgroundColor: "#211818",
     marginTop: 5,
-    width: '80%',
+    width: '100%',
     paddingVertical: 14,
     borderRadius: 12,
     alignSelf: "center",
+    textAlign: 'center',
   },
   disabledButton: {
-    backgroundColor: '#77888C', // Disabled color
+    backgroundColor: '#737373', // Disabled color
     marginTop: 5,
-    width: '80%',
+    width: '100%',
     paddingVertical: 14,
     borderRadius: 12,
     alignSelf: "center",
+    textAlign: 'center',
   },
   container: {
     display: 'flex',
+  },
+  errorText: {
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
+    color: 'red',
+    fontSize: 14,
+    textAlign: 'center',
+    margin: 10,
   }
 });

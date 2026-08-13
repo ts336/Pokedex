@@ -182,14 +182,17 @@ export default function Index() {
 const styles = StyleSheet.create({
   name: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: 700,
     textAlign: "center",
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.25,
   },
   type: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 400,
     color: 'grey',
     textAlign: "center",
+    letterSpacing: -0.14,
   },
   heading: {
     fontSize: 30,

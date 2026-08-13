@@ -6,13 +6,13 @@ export default function RootLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Home", 
+          title: "Home",
         }}
-        />
+      />
       <Stack.Screen
         name="userinfo"
         options={{
-          title:"User Details",
+          title: "User Details",
           headerBackButtonDisplayMode: "minimal",
           presentation: "formSheet",
           sheetAllowedDetents: [0.7, 0.9],
@@ -24,7 +24,7 @@ export default function RootLayout() {
       <Stack.Screen
         name="welcome"
         options={{
-          title:"Welcome",
+          title: "Welcome",
           headerBackButtonDisplayMode: "minimal",
           presentation: "formSheet",
           sheetAllowedDetents: [0.45],

@@ -1,7 +1,15 @@
 import { Link, useRootNavigationState, useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useRef, useState } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 interface Pokemon {
   name: string;
@@ -13,9 +21,9 @@ interface Pokemon {
 
 interface PokemonType {
   type: {
-      name: string;
-      url: string;
-  }
+    name: string;
+    url: string;
+  };
 }
 
 const colorsByType = {
@@ -37,16 +45,18 @@ const colorsByType = {
   dark: "#705746",
   steel: "#B7B7CE",
   fairy: "#D685AD",
-}
+};
 
 export default function Index() {
   const router = useRouter();
   const rootNavigationState = useRootNavigationState();
   const openedUserInfo = useRef(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  
+
   const params = useLocalSearchParams();
-  const [pokeNumber, onChangePokeNumber] = useState<string>(String(params.pokeNumber ?? '20'));
+  const [pokeNumber, onChangePokeNumber] = useState<string>(
+    String(params.pokeNumber ?? "20"),
+  );
 
   // To let app load correctly
   useEffect(() => {
@@ -70,46 +80,44 @@ export default function Index() {
 
   // Fetch pokemon from API
   useEffect(() => {
-      fetchPokemons();
+    fetchPokemons();
   }, []);
 
-  
   async function fetchPokemons() {
     try {
       /* fetch is a function that lets u hit an API,
       takes URL (endpoint) as a parameter and some request info
       endpoint gives 20 pokemon in JSON format*/
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?limit=50"
+        "https://pokeapi.co/api/v2/pokemon/?limit=50",
       );
-      
+
       /* pokemon saved in response variable 
       but we need to convert it to JSON format 
       so it can be used in app
       */
       const data = await response.json();
 
-
-      // fetch detailed info for each pokemon in parallel      
+      // fetch detailed info for each pokemon in parallel
       const detailedPokemons = await Promise.all(
         data.results.map(async (pokemon: any) => {
           const res = await fetch(pokemon.url);
           const details = await res.json();
           return {
             name: pokemon.name,
-            image: details.sprites.front_default, // get image 
+            image: details.sprites.front_default, // get image
             imageBack: details.sprites.back_default,
             types: details.types,
             url: pokemon.url,
           };
-        })
+        }),
       );
 
       // set state to detailedPokemons
       setPokemons(detailedPokemons);
-
-    } catch (e) { // catch errors and log to console
-        console.log(e);
+    } catch (e) {
+      // catch errors and log to console
+      console.log(e);
     }
   }
 
@@ -120,30 +128,29 @@ export default function Index() {
         padding: 16,
       }}
     >
-      <Text style={styles.heading}>Hello {params.userName ?? 'there'}!</Text>
+      <Text style={styles.heading}>Hello {params.userName ?? "there"}!</Text>
       <Text style={styles.normaltext}>
-          We are currently displaying {pokeNumber} pokemon!
+        We are currently displaying {pokeNumber} pokemon!
       </Text>
-     
+
       <View style={styles.inline}>
         <TextInput
-        style={styles.input}
-        placeholder="How many Pokemon do you want to see?"
-        onChangeText={onChangePokeNumber}
-        value={pokeNumber}
-        keyboardType="numeric"
+          style={styles.input}
+          placeholder="How many Pokemon do you want to see?"
+          onChangeText={onChangePokeNumber}
+          value={pokeNumber}
+          keyboardType="numeric"
         />
         <Pressable
-            style={styles.button}
-            /* onPress={() => } */
-            >
-            <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
+          style={styles.button}
+          /* onPress={() => } */
+        >
+          <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
         </Pressable>
       </View>
-      
 
       {pokemons.map((pokemon) => (
-        <Link 
+        <Link
           key={pokemon.name}
           href={{
             pathname: "/details",
@@ -157,21 +164,23 @@ export default function Index() {
           }}
         >
           <View>
-              <Text style={styles.name}>{pokemon.name}</Text>
-              <Text style={styles.type}>{pokemon.types[0].type.name}</Text>
-              
-              <View style={{
+            <Text style={styles.name}>{pokemon.name}</Text>
+            <Text style={styles.type}>{pokemon.types[0].type.name}</Text>
+
+            <View
+              style={{
                 flexDirection: "row",
-              }}>
-                <Image 
-                  source={{uri: pokemon.image}}
-                  style={{ width: 150, height: 150}}
-                />
-                <Image 
-                  source={{uri: pokemon.imageBack}}
-                  style={{ width: 150, height: 150}}
-                />
-              </View>
+              }}
+            >
+              <Image
+                source={{ uri: pokemon.image }}
+                style={{ width: 150, height: 150 }}
+              />
+              <Image
+                source={{ uri: pokemon.imageBack }}
+                style={{ width: 150, height: 150 }}
+              />
+            </View>
           </View>
         </Link>
       ))}
@@ -190,33 +199,33 @@ const styles = StyleSheet.create({
   type: {
     fontSize: 20,
     fontWeight: 400,
-    color: 'grey',
+    color: "grey",
     textAlign: "center",
     letterSpacing: -0.14,
   },
   heading: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   normaltext: {
-      marginBottom: 5,        
+    marginBottom: 5,
   },
   input: {
-      height: 40,
-      width: 260,
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 10,
+    height: 40,
+    width: 260,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
   },
   button: {
-      backgroundColor: "#111",
-      paddingHorizontal: 30,
-      paddingVertical: 12,
-      borderRadius: 12,
-      alignSelf: 'center',
+    backgroundColor: "#111",
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignSelf: "center",
   },
   inline: {
     flexDirection: "row",
-    justifyContent: "space-between"
-  }
-})
+    justifyContent: "space-between",
+  },
+});

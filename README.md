@@ -1,50 +1,71 @@
-# Welcome to your Expo app 👋
+# **Basic Pokedex**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Basic Pokedex is a mobile application built with React Native with Expo that simplifies the world of Pokemon! The app allows users to enter their details, how many Pokemon they want to see and view basic details about pokemon, providing an aesthetic user experience. The app is not performance-intensive. 
 
-## Get started
+## **Getting Started**
 
-1. Install dependencies
+### **Prerequisites**
 
-   ```bash
-   npm install
-   ```
+To run this application, you need to have the following installed:
 
-2. Start the app
+- **Node.js**: The prebuilt version is fine. Go to the official node.js website and download the prebuilt version.
+- **npm**: A package manager for installing dependencies. Prefer npm since it comes with [Node.js](http://node.js) prebuilt version.
+- **Git**: For cloning the repository.
+- **Expo Go**: The mobile app for iOS or Android that allows you to run React Native projects on your physical device.
 
-   ```bash
-   npx expo start
-   ```
+### **Installation & Setup**
 
-In the output, you'll find options to open the app in a
+This is a complete walkthrough on how to use this program. First, ensure the above requirements are met. **Do not move directories until specified.**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+1. **Go to Terminal/command prompt. Ensure that you are in the right drive. On Windows, you may be on the H: drive. Please move to the C: drive (or whichever drive you will be downloading the Pokedex files to). This can be done by entering `cd /d c:\` into the terminal. **
+2. **Check that `npx` and `npm` are up to date. You can use commands like `npm -v` to check the version.**
+3. **Check that `git` is up to date.** (not needed if downloading from github)
+4. **In your terminal, navigate to the directory where you want to have the Pokedex folder (or just use your desktop - no action required).**
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+_To move directories: `cd nameOfDirectory(file name)`_
+_To make a new directory: `mkdir nameOfDirectory(file name)`_
+   
 
-## Get a fresh project
+**Clone the Repository**
 
-When you're ready, run:
+Staying in the current terminal tab, run the following command to download the project:  
+`git clone <https://github.com/ts336/Pokedex>`
 
-```bash
-npm run reset-project
-```
+If you do not want to download git, you can get the Pokedex files from GitHub. On the Pokedex GitHub homepage, press code, then download as ZIP.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+**Navigate to the Project Directory**
 
-## Learn more
+Change into the project folder:  
+`cd Pokedex` (terminal)
+For Windows, type `cd` and copy the file path to the Pokedex file (which has all the Pokedex app files in it) and paste it after `cd`.
 
-To learn more about developing your project with Expo, look at the following resources:
+**Install Dependencies**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Install all the necessary packages for the app:  
+`npm install`
 
-## Join the community
+If Expo says any packages need updates, enter: `npm update nameofpackage`
 
-Join our community of developers creating universal apps.
+**Run the Application**
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Start the Expo development server:  
+`npx expo start`
+
+If this does not work, try adding `--tunnel` to the end of the command. You may be asked to download ngrok. Please press Y to install. If it doesn't work, press ctrl + c to stop the hosting, then enter `npm install ngrok`. Try use `--tunnel` again.
+
+1. After running this command, a QR code will appear in your terminal.
+2. **View the App**
+    - **On your phone:** Open the **Camera** app and scan the QR code on your terminal. The Expo Go app should load automatically. If Expo Go is not installed on your phone, you will be directed to the app store. Make sure that your phone and the hosting device (laptop) are on the same wifi network.
+    - **On a web browser:** Alternatively, you may open the web version by entering `w` in the terminal. However, this is not the intended use, and the display may be awkward.
+    - **On an emulator:** Press `a` for Android or `i` for iOS to launch the app on an emulator if you have one set up.
+
+## **Important Notes ⚠️**
+
+- **File Size:** The project may take up to 300-400MB of space on your device. Please ensure you have sufficient storage.
+
+## **Troubleshooting & FAQ ❓**
+
+- **npm install fails:** This could be due to network issues or an outdated Node.js version. Try running the command again, or check your Node.js installation.
+- **App not loading on phone:** Ensure your computer and your phone are connected to the **same Wi-Fi network**.
+- **Can't find the QR code:** Scroll up in your terminal to see the output from the npx expo start command.
+- **Same network but still not working:** Please use the command `npx expo start --tunnel`, or try from your home wifi (organisation and public wifi may have restrictions on them, preventing the app from working).

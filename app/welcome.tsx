@@ -43,16 +43,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.21,
   },
   normaltext: {
-    marginBottom: 30,
+    marginBottom: 20,
     fontFamily: "SF Pro Display",
     letterSpacing: -0.21,
-  },
-  input: {
-    height: 40,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
   },
   button: {
     backgroundColor: "#211818",
@@ -60,5 +53,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     alignSelf: "center",
+    width: '100%'
   },
 });

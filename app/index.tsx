@@ -54,8 +54,15 @@ export default function Index() {
   const openedUserInfo = useRef(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const params = useLocalSearchParams();
   const [pokeNumber, onChangePokeNumber] = useState<string>(
+    String(params.pokeNumber ?? "20"),
+  );
+  // separate input value from the displayed/active pokeNumber
+  const [inputValue, setInputValue] = useState<string>("");
+  const [displayPokeNumber, setDisplayPokeNumber] = useState<string>(
     String(params.pokeNumber ?? "20"),
   );
 
@@ -76,6 +83,7 @@ export default function Index() {
   useEffect(() => {
     if (params.pokeNumber) {
       onChangePokeNumber(String(params.pokeNumber));
+      setDisplayPokeNumber(String(params.pokeNumber));
       fetchPokemons(Number(params.pokeNumber));
     }
   }, [params.pokeNumber]);
@@ -121,13 +129,27 @@ export default function Index() {
 
       // set state to detailedPokemons
       setPokemons(detailedPokemons);
+      return true;
     } catch (e) {
       // catch errors and log to console
       console.log(e);
+      return false;
     } finally {
       setIsLoading(false);
     }
   }
+
+  const handlePokeNumber = (value: string) => {
+    const pokeValue = Number(value);
+
+    if (!Number.isInteger(pokeValue) || pokeValue < 1 || pokeValue > 100) {
+      setErrorMessage('Please pick a number of Pokemon between 1 to 100 to display');
+      return false;
+    }
+
+    setErrorMessage('');
+    return true;
+  };
 
   return (
     <ScrollView
@@ -138,24 +160,38 @@ export default function Index() {
     >
       <Text style={styles.heading}>Hello {params.userName ?? "there"}!</Text>
       <Text style={styles.normaltext}>
-        We are currently displaying {pokeNumber} pokemon!
+        We are currently displaying {displayPokeNumber} pokemon!
       </Text>
 
       <View style={styles.inline}>
         <TextInput
           style={styles.input}
           placeholder="How many Pokemon do you want to see?"
-          onChangeText={onChangePokeNumber}
-          value={pokeNumber}
+          onChangeText={setInputValue}
+          value={inputValue}
           keyboardType="numeric"
         />
         <Pressable
           style={styles.button}
-          onPress={() => fetchPokemons(Number(pokeNumber))}
+          onPress={async (e) => {
+            // validate inputs; prevent fetching pokemon if invalid
+            if (!handlePokeNumber(inputValue)) {
+              e.preventDefault();
+            } else {
+              const ok = await fetchPokemons(Number(inputValue));
+              if (ok) {
+                setDisplayPokeNumber(String(inputValue));
+                setInputValue('');
+                onChangePokeNumber(String(inputValue));
+              }
+            }
+          }}
         >
           <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
         </Pressable>
       </View>
+
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
       {isLoading ? (
         <ActivityIndicator size="large" color="#111" style={{ marginTop: 24 }} />
@@ -245,4 +281,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  errorText: {
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
+    color: 'red',
+    fontSize: 14,
+    textAlign: 'center',
+    margin: 10,
+  }
 });

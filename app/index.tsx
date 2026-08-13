@@ -2,6 +2,7 @@ import { Link, useRootNavigationState, useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -75,21 +76,26 @@ export default function Index() {
   useEffect(() => {
     if (params.pokeNumber) {
       onChangePokeNumber(String(params.pokeNumber));
+      fetchPokemons(Number(params.pokeNumber));
     }
   }, [params.pokeNumber]);
 
-  // Fetch pokemon from API
+  // Default fetch pokemon from API
   useEffect(() => {
-    fetchPokemons();
+    fetchPokemons(20);
   }, []);
 
-  async function fetchPokemons() {
+  const [isLoading, setIsLoading] = useState(false);
+  
+
+  async function fetchPokemons(num: number) {
+    setIsLoading(true);
     try {
       /* fetch is a function that lets u hit an API,
       takes URL (endpoint) as a parameter and some request info
       endpoint gives 20 pokemon in JSON format*/
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/?limit=50",
+        `https://pokeapi.co/api/v2/pokemon/?limit=${num}`,
       );
 
       /* pokemon saved in response variable 
@@ -118,6 +124,8 @@ export default function Index() {
     } catch (e) {
       // catch errors and log to console
       console.log(e);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -143,47 +151,52 @@ export default function Index() {
         />
         <Pressable
           style={styles.button}
-          /* onPress={() => } */
+          onPress={() => fetchPokemons(Number(pokeNumber))}
         >
           <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
         </Pressable>
       </View>
 
-      {pokemons.map((pokemon) => (
-        <Link
-          key={pokemon.name}
-          href={{
-            pathname: "/details",
-            params: { name: pokemon.name, url: pokemon.url },
-          }}
-          style={{
-            // @ts-ignore this is happening because the types were not defined but not needed
-            backgroundColor: colorsByType[pokemon.types[0].type.name] + 50,
-            padding: 20,
-            borderRadius: 15,
-          }}
-        >
-          <View>
-            <Text style={styles.name}>{pokemon.name}</Text>
-            <Text style={styles.type}>{pokemon.types[0].type.name}</Text>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#111" style={{ marginTop: 24 }} />
+      ) : (
+        pokemons.map((pokemon) => (
+          <Link
+            key={pokemon.name}
+            href={{
+              pathname: "/details",
+              params: { name: pokemon.name, url: pokemon.url },
+            }}
+            style={{
+              // @ts-ignore this is happening because the types were not defined but not needed
+              backgroundColor: colorsByType[pokemon.types[0].type.name] + 50,
+              padding: 20,
+              borderRadius: 15,
+            }}
+          >
+            <View>
+              <Text style={styles.name}>{pokemon.name}</Text>
+              <Text style={styles.type}>{pokemon.types[0].type.name}</Text>
 
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <Image
-                source={{ uri: pokemon.image }}
-                style={{ width: 150, height: 150 }}
-              />
-              <Image
-                source={{ uri: pokemon.imageBack }}
-                style={{ width: 150, height: 150 }}
-              />
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <Image
+                  source={{ uri: pokemon.image }}
+                  style={{ width: 150, height: 150 }}
+                />
+                <Image
+                  source={{ uri: pokemon.imageBack }}
+                  style={{ width: 150, height: 150 }}
+                />
+              </View>
             </View>
-          </View>
-        </Link>
-      ))}
+          </Link>
+        ))
+      )}
+      
     </ScrollView>
   );
 }

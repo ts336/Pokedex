@@ -28,7 +28,8 @@ export default function RootLayout() {
           headerBackButtonDisplayMode: "minimal",
           presentation: "formSheet",
           sheetAllowedDetents: [0.45],
-          sheetGrabberVisible: true,
+          gestureEnabled: false,
+          headerBackVisible: false,
         }}
       />
       <Stack.Screen

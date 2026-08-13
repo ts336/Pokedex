@@ -7,6 +7,10 @@ export default function UserInfo() {
   const [age, onChangeAge] = useState("");
   const [pokeNumber, onChangePokeNumber] = useState("");
 
+  // Enables button when there is input
+  const isEnabled = name.length > 0 && age.length > 0 && pokeNumber.length > 0; 
+  const buttonStyle = isEnabled ? styles.enabledButton : styles.disabledButton;
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -44,7 +48,8 @@ export default function UserInfo() {
             pathname: "/welcome",
             params: { name: name, pokeNumber: pokeNumber },
             }}
-            style={styles.button}
+            style={buttonStyle}
+            disabled={!isEnabled}
             onPress={() => router.dismiss()}
         >
             <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
@@ -72,16 +77,25 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "SF Pro Display",
     letterSpacing: -0.21,
+    width: '80%',
     height: 40,
     marginBottom: 10,
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
   },
-  button: {
+  enabledButton: {
     backgroundColor: "#211818",
     marginTop: 5,
-    paddingHorizontal: 160,
+    width: '80%',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignSelf: "center",
+  },
+  disabledButton: {
+    backgroundColor: '#77888C', // Disabled color
+    marginTop: 5,
+    width: '80%',
     paddingVertical: 14,
     borderRadius: 12,
     alignSelf: "center",

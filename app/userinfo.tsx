@@ -19,10 +19,12 @@ export default function UserInfo() {
   // Check entered information is valid
   const handleUserInfo = () => {
     const trimmedName = name.trim();
-    const ageValue = Number(age);
-    const pokeValue = Number(pokeNumber);
+    const ageText = age.trim();
+    const pokeText = pokeNumber.trim();
+    const ageValue = Number(ageText);
+    const pokeValue = Number(pokeText);
 
-    if (!trimmedName || !age || !pokeNumber) {
+    if (!trimmedName || !ageText || !pokeText) {
       setErrorMessage(
         "Name, age and number of Pokemon cannot be empty. Please enter your details!",
       );
@@ -43,16 +45,16 @@ export default function UserInfo() {
       return false;
     }
 
-    if (!Number.isInteger(ageValue) || ageValue < 12 || ageValue > 110) {
+    if (!/^\d+$/.test(ageText) || !Number.isInteger(ageValue) || ageValue < 12 || ageValue > 110) {
       setErrorMessage(
-        "Only people over age 12 and below 110 can use this program. Please use numbers for your age.",
+        "Only people age 12 and above and below 110 can use this program. Please use whole numbers for your age.",
       );
       return false;
     }
 
-    if (!Number.isInteger(pokeValue) || pokeValue < 1 || pokeValue > 100) {
+    if (!/^\d+$/.test(pokeText) || !Number.isInteger(pokeValue) || pokeValue < 1 || pokeValue > 100) {
       setErrorMessage(
-        "Please pick a number of Pokemon between 1 to 100 to display",
+        "Please pick a whole number of Pokemon between 1 to 100 to display",
       );
       return false;
     }

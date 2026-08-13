@@ -3,15 +3,18 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 
+// Store ability name and description
 type AbilityInfo = {
   name: string;
   description: string;
 };
 
 export default function Details() {
+  // Get params and set state for abilities
   const params = useLocalSearchParams();
   const [abilities, setAbilities] = useState<AbilityInfo[]>([]);
 
+  // Fetch Pokemon details
   async function fetchPokemonByName(url: any) {
     try {
       const response = await fetch(url);
@@ -43,7 +46,7 @@ export default function Details() {
 
   useEffect(() => {
     fetchPokemonByName(params.url); // fetch selected pokemon details
-  }, [params.url]); // good practice: re-fetch whenever URL changes
+  }, [params.url]); // re-fetch whenever URL changes
 
   return (
     // <> </> (fragment) because component can only return one top-level JSX element
@@ -68,6 +71,7 @@ export default function Details() {
   );
 }
 
+// Styling for page
 const styles = StyleSheet.create({
   ability: {
     fontSize: 20,

@@ -1,6 +1,8 @@
 import { Stack } from "expo-router";
 import { Platform } from "react-native";
 
+// Set up app screen and their header options
+
 export default function RootLayout() {
   return (
     <Stack>

@@ -3,18 +3,20 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function UserInfo() {
+  // States for input and error handling
   const [name, onChangeName] = useState("");
   const [age, onChangeAge] = useState("");
   const [pokeNumber, onChangePokeNumber] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Styling + Error handling
   const isEnabled =
     name.trim().length > 0 &&
     age.trim().length > 0 &&
     pokeNumber.trim().length > 0;
   const buttonStyle = isEnabled ? styles.enabledButton : styles.disabledButton;
 
+  // Check entered information is valid
   const handleUserInfo = () => {
     const trimmedName = name.trim();
     const ageValue = Number(age);

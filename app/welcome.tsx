@@ -3,8 +3,10 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { ScrollView, StyleSheet, Text } from "react-native";
 
 export default function UserInfo() {
+  // Read values passed from previous screen
   const params = useLocalSearchParams();
 
+  // GUI + return to the home screen with the chosen Pokemon count
   return (
     <ScrollView
       contentContainerStyle={{

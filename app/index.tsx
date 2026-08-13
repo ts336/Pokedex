@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 // defining properties then pokemon for stronger typescript
+// Types for API data
 interface PokemonListItem {
   name: string;
   url: string;
@@ -56,6 +57,7 @@ interface Pokemon {
   types: PokemonTypeInfo[]; // array bc there can be more than one type
 }
 
+// Colours for each Pokemon type
 const colorsByType = {
   normal: "#A8A77A",
   fire: "#EE8130",
@@ -77,15 +79,16 @@ const colorsByType = {
   fairy: "#D685AD",
 };
 
+// Overall function that creates the page
 export default function Index() {
+  // Const variables and states for page navigation
   const router = useRouter();
   const rootNavigationState = useRootNavigationState();
   const openedUserInfo = useRef(false);
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
-  const [errorMessage, setErrorMessage] = useState("");
-
+  // Const variables and states for displaying Pokemon
   const params = useLocalSearchParams();
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [pokeNumber, onChangePokeNumber] = useState<string>(
     String(params.pokeNumber ?? "20"),
   );
@@ -95,7 +98,11 @@ export default function Index() {
     String(params.pokeNumber ?? "20"),
   );
 
-  // To let app load correctly
+  // State for error messages + handling loading state
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Handling smoother navigation
   useEffect(() => {
     if (!rootNavigationState?.key) return;
     if (openedUserInfo.current) return;
@@ -108,7 +115,7 @@ export default function Index() {
     return () => clearTimeout(id);
   }, [rootNavigationState?.key, router]);
 
-  // Update pokeNumber when params change
+  // Update pokeNumber and related states when params change
   useEffect(() => {
     if (params.pokeNumber) {
       onChangePokeNumber(String(params.pokeNumber));
@@ -117,13 +124,12 @@ export default function Index() {
     }
   }, [params.pokeNumber]);
 
-  // Default fetch pokemon from API
+  // Default/placeholder fetch pokemon from API
   useEffect(() => {
     fetchPokemons(20);
   }, []);
 
-  const [isLoading, setIsLoading] = useState(false);
-
+  // Async function to fetch Pokemon data from API
   async function fetchPokemons(num: number) {
     setIsLoading(true);
     try {
@@ -179,6 +185,7 @@ export default function Index() {
     }
   }
 
+  // Error handling for user input
   const handlePokeNumber = (value: string) => {
     const pokeValue = Number(value);
 
@@ -193,6 +200,7 @@ export default function Index() {
     return true;
   };
 
+  // Returning GUI, which maps Pokemon to GUI components
   return (
     <ScrollView
       contentContainerStyle={{
@@ -268,11 +276,11 @@ export default function Index() {
                 }}
               >
                 <Image
-                  source={{ uri: pokemon.image ?? ""}}
+                  source={{ uri: pokemon.image ?? "" }}
                   style={{ width: 150, height: 150 }}
                 />
                 <Image
-                  source={{ uri: pokemon.imageBack ?? ""}}
+                  source={{ uri: pokemon.imageBack ?? "" }}
                   style={{ width: 150, height: 150 }}
                 />
               </View>
@@ -284,6 +292,7 @@ export default function Index() {
   );
 }
 
+// Styling for page
 const styles = StyleSheet.create({
   name: {
     fontSize: 28,

@@ -1,6 +1,6 @@
 import { Link, router } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function UserInfo() {
   const [name, onChangeName] = useState("");
@@ -14,51 +14,64 @@ export default function UserInfo() {
         padding: 16,
       }}
     >
-      <Text style={styles.heading}>Welcome to Basic Pokedex!</Text>
-      <Text style={styles.normaltext}>Enter the following to get started!</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="What is your name?"
-        onChangeText={onChangeName}
-        value={name}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="What is your age?"
-        onChangeText={onChangeAge}
-        value={age}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="How many Pokemon do you want to see?"
-        onChangeText={onChangePokeNumber}
-        value={pokeNumber}
-        keyboardType="numeric"
-      />
-      <Link
-        href={{
-          pathname: "/welcome",
-          params: { name: name, pokeNumber: pokeNumber },
-        }}
-        style={styles.button}
-        onPress={() => router.dismiss()}
-      >
-        <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
-      </Link>
+      
+      <View style={styles.container}>
+        <Text style={styles.heading}>Welcome to Basic Pokedex!</Text>
+        <Text style={styles.normaltext}>Enter the following to get started!</Text>
+
+        <TextInput
+            style={styles.input}
+            placeholder="What is your name?"
+            onChangeText={onChangeName}
+            value={name}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="What is your age?"
+            onChangeText={onChangeAge}
+            value={age}
+            keyboardType="numeric"
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="How many Pokemon do you want to see?"
+            onChangeText={onChangePokeNumber}
+            value={pokeNumber}
+            keyboardType="numeric"
+        />
+        <Link
+            href={{
+            pathname: "/welcome",
+            params: { name: name, pokeNumber: pokeNumber },
+            }}
+            style={styles.button}
+            onPress={() => router.dismiss()}
+        >
+            <Text style={{ color: "white", fontWeight: "600" }}>Done</Text>
+        </Link>
+      </View>
+      
+      
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
+    marginBottom: 10
   },
   normaltext: {
-    marginBottom: 5,
+    marginBottom: 30,
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
   },
   input: {
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
     height: 40,
     marginBottom: 10,
     borderWidth: 1,
@@ -66,10 +79,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#211818",
+    marginTop: 5,
     paddingHorizontal: 160,
     paddingVertical: 14,
     borderRadius: 12,
     alignSelf: "center",
   },
+  container: {
+    display: 'flex',
+  }
 });

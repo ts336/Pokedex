@@ -15,7 +15,7 @@ export default function RootLayout() {
           title: "User Details",
           headerBackButtonDisplayMode: "minimal",
           presentation: "formSheet",
-          sheetAllowedDetents: [0.7, 0.9],
+          sheetAllowedDetents: [0.5, 0.7],
           sheetGrabberVisible: true,
           gestureEnabled: false,
           headerBackVisible: false,

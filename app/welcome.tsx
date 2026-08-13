@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     alignSelf: "center",
-    width: '100%'
+    width: "100%",
   },
 });

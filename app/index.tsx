@@ -12,19 +12,48 @@ import {
   View,
 } from "react-native";
 
-interface Pokemon {
+// defining properties then pokemon for stronger typescript
+interface PokemonListItem {
   name: string;
   url: string;
-  image: string;
-  imageBack: string;
-  types: PokemonType[]; // array bc there can be more than one type
 }
 
-interface PokemonType {
+interface PokemonTypeInfo {
   type: {
     name: string;
     url: string;
   };
+}
+
+interface PokemonDetailsResponse {
+  sprites: {
+    front_default?: string | null;
+    back_default?: string | null;
+  };
+  types: PokemonTypeInfo[];
+}
+
+interface PokemonListResponse {
+  results: PokemonListItem[];
+}
+
+interface AbilityEntry {
+  language: {
+    name: string;
+  };
+  short_effect?: string;
+}
+
+interface AbilityResponse {
+  effect_entries: AbilityEntry[];
+}
+
+interface Pokemon {
+  name: string;
+  url: string;
+  image: string | null;
+  imageBack: string | null;
+  types: PokemonTypeInfo[]; // array bc there can be more than one type
 }
 
 const colorsByType = {
@@ -54,7 +83,7 @@ export default function Index() {
   const openedUserInfo = useRef(false);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const params = useLocalSearchParams();
   const [pokeNumber, onChangePokeNumber] = useState<string>(
@@ -94,7 +123,6 @@ export default function Index() {
   }, []);
 
   const [isLoading, setIsLoading] = useState(false);
-  
 
   async function fetchPokemons(num: number) {
     setIsLoading(true);
@@ -106,23 +134,35 @@ export default function Index() {
         `https://pokeapi.co/api/v2/pokemon/?limit=${num}`,
       );
 
+      if (!response.ok) {
+        throw new Error("Failed to fetch Pokémon list");
+      }
+
       /* pokemon saved in response variable 
       but we need to convert it to JSON format 
       so it can be used in app
       */
-      const data = await response.json();
+      const data: PokemonListResponse = await response.json();
 
       // fetch detailed info for each pokemon in parallel
-      const detailedPokemons = await Promise.all(
-        data.results.map(async (pokemon: any) => {
+      const detailedPokemons: Pokemon[] = await Promise.all(
+        data.results.map(async (pokemon) => {
           const res = await fetch(pokemon.url);
-          const details = await res.json();
+          if (!res.ok) {
+            throw new Error(`Failed to fetch ${pokemon.name}`);
+          }
+
+          const details: PokemonDetailsResponse = await res.json();
+
+          const primaryType = details.types?.[0]?.type?.name ?? "normal";
+
           return {
             name: pokemon.name,
-            image: details.sprites.front_default, // get image
-            imageBack: details.sprites.back_default,
-            types: details.types,
             url: pokemon.url,
+            image: details.sprites?.front_default ?? null,
+            imageBack: details.sprites?.back_default ?? null,
+            types: details.types ?? [],
+            primaryType,
           };
         }),
       );
@@ -143,11 +183,13 @@ export default function Index() {
     const pokeValue = Number(value);
 
     if (!Number.isInteger(pokeValue) || pokeValue < 1 || pokeValue > 100) {
-      setErrorMessage('Please pick a number of Pokemon between 1 to 100 to display');
+      setErrorMessage(
+        "Please pick a number of Pokemon between 1 to 100 to display",
+      );
       return false;
     }
 
-    setErrorMessage('');
+    setErrorMessage("");
     return true;
   };
 
@@ -181,7 +223,7 @@ export default function Index() {
               const ok = await fetchPokemons(Number(inputValue));
               if (ok) {
                 setDisplayPokeNumber(String(inputValue));
-                setInputValue('');
+                setInputValue("");
                 onChangePokeNumber(String(inputValue));
               }
             }
@@ -191,10 +233,16 @@ export default function Index() {
         </Pressable>
       </View>
 
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
 
       {isLoading ? (
-        <ActivityIndicator size="large" color="#111" style={{ marginTop: 24 }} />
+        <ActivityIndicator
+          size="large"
+          color="#111"
+          style={{ marginTop: 24 }}
+        />
       ) : (
         pokemons.map((pokemon) => (
           <Link
@@ -220,11 +268,11 @@ export default function Index() {
                 }}
               >
                 <Image
-                  source={{ uri: pokemon.image }}
+                  source={{ uri: pokemon.image ?? ""}}
                   style={{ width: 150, height: 150 }}
                 />
                 <Image
-                  source={{ uri: pokemon.imageBack }}
+                  source={{ uri: pokemon.imageBack ?? ""}}
                   style={{ width: 150, height: 150 }}
                 />
               </View>
@@ -232,7 +280,6 @@ export default function Index() {
           </Link>
         ))
       )}
-      
     </ScrollView>
   );
 }
@@ -284,9 +331,9 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: "SF Pro Display",
     letterSpacing: -0.21,
-    color: 'red',
+    color: "red",
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 10,
-  }
+  },
 });

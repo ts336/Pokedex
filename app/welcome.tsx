@@ -37,11 +37,15 @@ export default function UserInfo() {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
   },
   normaltext: {
-    marginBottom: 5,
+    marginBottom: 30,
+    fontFamily: "SF Pro Display",
+    letterSpacing: -0.21,
   },
   input: {
     height: 40,
